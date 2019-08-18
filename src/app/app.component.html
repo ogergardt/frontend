@@ -1,0 +1,55 @@
+<mat-sidenav-container>
+  <mat-sidenav
+      #sidenav
+      (click)="sidenav.toggle()"
+      fixedInViewport="true"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'">
+    <mat-toolbar>{{ menu | titlecase }}</mat-toolbar>
+    <mat-nav-list (click)="sidenav.toggle()">
+      <a mat-list-item (click)="sidenav.toggle()" routerLink="/">Home</a>
+      <a mat-list-item *ngIf="!userService.isLoggedIn && (isHandset$ | async)" (click)="sidenav.toggle()" routerLink="/user/login">Login</a>
+      <div *ngIf="userService.isLoggedIn">
+        <a mat-list-item (click)="sidenav.toggle()" routerLink="/user/dashboard">Dashboard</a>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="sidenav.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <a *ngIf="!(isHandset$ | async)" fxFlexOffset="20px" routerLink="/">{{logo | titlecase}}</a>
+      <span class="flex-auto"></span>
+      <button mat-button *ngIf="!(isHandset$ | async)" routerLink="/">
+        Home
+      </button>
+      <button *ngIf="userService.isLoggedIn && !(isHandset$ | async)" routerLink="/user/dashboard"
+              mat-button>
+        Dashboard
+      </button>
+      <button *ngIf="!userService.isLoggedIn && !(isHandset$ | async)" routerLink="/user/login"
+              mat-button>Login
+      </button>
+      <div *ngIf="userService.isLoggedIn">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button routerLink="/user/profile" mat-menu-item>View Your Profile</button>
+          <button (click)="onLogout()" mat-menu-item>Logout</button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
