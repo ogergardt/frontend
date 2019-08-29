@@ -16,10 +16,13 @@ import { AuthGuard } from './guards/auth.guard';
 import { UserService } from './services/user.service';
 import { User } from './user/dtos/user.dto';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {MatMenuModule, MatSnackBar, MatSnackBarModule} from '@angular/material';
+import {MatAutocompleteModule, MatMenuModule, MatSnackBar, MatSnackBarModule} from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 import {GlobalErrorHandler} from './global-error-handler';
 import {ServerErrorInterceptor} from './server-error.interceptor';
+import { SearchComponent } from './components/search/search.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import { BoldPipe } from './pipes/bold.pipe';
 
 export function tokenGetter() {
   const user: User = JSON.parse(localStorage.getItem('currentUser'));
@@ -30,7 +33,9 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     NotFoundComponent,
-    HomeComponent
+    HomeComponent,
+    BoldPipe,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,8 @@ export function tokenGetter() {
     }),
     MatMenuModule,
     MatSnackBarModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
